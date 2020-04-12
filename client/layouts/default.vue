@@ -1,7 +1,9 @@
 <template>
 	<v-app>
 		<v-app-bar app>
-			<v-toolbar-title v-text="title" />
+			<router-link to="/">
+				<v-toolbar-title v-text="title" />
+			</router-link>
 		</v-app-bar>
 		<v-content>
 			<v-container>
