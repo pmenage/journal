@@ -59,11 +59,7 @@ export default {
 			if (!this.valid) {
 				this.$refs.form.validate();
 			} else {
-				console.log(this.formData);
-				const trip = await this.$axios.$post(
-					"http://localhost:8080/trips",
-					this.formData
-				);
+				const trip = await this.$tripRepository.create(this.formData);
 				this.$router.push({ path: "/trips" });
 			}
 		}
