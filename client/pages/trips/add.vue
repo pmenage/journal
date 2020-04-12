@@ -33,6 +33,7 @@
 							<v-date-picker v-model="formData.endDate" @input="endMenu = false"></v-date-picker>
 						</v-menu>
 						<div id="geocoder" class="geocoder"></div>
+						<div id="geocoder2" class="geocoder"></div>
 						<v-text-field v-model="formData.country" :rules="countryRules" label="Country" required></v-text-field>
 						<v-text-field v-model="formData.latitude" label="Latitude" required></v-text-field>
 						<v-text-field v-model="formData.longitude" label="Longitude" required></v-text-field>
@@ -92,8 +93,12 @@ export default {
 			placeholder: "Location"
 		});
 		document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
-		geocoder.on("results", results => {
-			console.log("EVENT", results);
+		geocoder.on("result", data => {
+			this.formData.longitude = data.result.center[0];
+			this.formData.latitude = data.result.center[1];
+			this.formData.country = data.result.context.find(context =>
+				context.id.includes("country")
+			).text;
 		});
 	}
 };

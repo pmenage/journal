@@ -33,6 +33,7 @@ export default {
   */
   plugins: [
     '~/plugins/repository',
+    '~/plugins/moment'
   ],
   /*
   ** Nuxt.js dev-modules
