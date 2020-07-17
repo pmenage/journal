@@ -5,7 +5,12 @@
 			<v-row>
 				<v-col>
 					<v-form ref="form" v-model="valid">
-						<v-text-field v-model="formData.name" :rules="nameRules" label="Name" required></v-text-field>
+						<v-text-field
+							v-model="formData.name"
+							:rules="nameRules"
+							label="Name"
+							required
+						></v-text-field>
 						<v-menu
 							v-model="startMenu"
 							:close-on-content-click="false"
@@ -15,9 +20,17 @@
 							min-width="290px"
 						>
 							<template v-slot:activator="{ on }">
-								<v-text-field v-model="formData.startDate" label="Start date" readonly v-on="on"></v-text-field>
+								<v-text-field
+									v-model="formData.startDate"
+									label="Start date"
+									readonly
+									v-on="on"
+								></v-text-field>
 							</template>
-							<v-date-picker v-model="formData.startDate" @input="startMenu = false"></v-date-picker>
+							<v-date-picker
+								v-model="formData.startDate"
+								@input="startMenu = false"
+							></v-date-picker>
 						</v-menu>
 						<v-menu
 							v-model="endMenu"
@@ -28,15 +41,36 @@
 							min-width="290px"
 						>
 							<template v-slot:activator="{ on }">
-								<v-text-field v-model="formData.endDate" label="End date" readonly v-on="on"></v-text-field>
+								<v-text-field
+									v-model="formData.endDate"
+									label="End date"
+									readonly
+									v-on="on"
+								></v-text-field>
 							</template>
-							<v-date-picker v-model="formData.endDate" @input="endMenu = false"></v-date-picker>
+							<v-date-picker
+								v-model="formData.endDate"
+								@input="endMenu = false"
+							></v-date-picker>
 						</v-menu>
 						<div id="geocoder" class="geocoder"></div>
 						<div id="geocoder2" class="geocoder"></div>
-						<v-text-field v-model="formData.country" :rules="countryRules" label="Country" required></v-text-field>
-						<v-text-field v-model="formData.latitude" label="Latitude" required></v-text-field>
-						<v-text-field v-model="formData.longitude" label="Longitude" required></v-text-field>
+						<v-text-field
+							v-model="formData.country"
+							:rules="countryRules"
+							label="Country"
+							required
+						></v-text-field>
+						<v-text-field
+							v-model="formData.latitude"
+							label="Latitude"
+							required
+						></v-text-field>
+						<v-text-field
+							v-model="formData.longitude"
+							label="Longitude"
+							required
+						></v-text-field>
 						<v-btn @click="submit">Submit</v-btn>
 					</v-form>
 				</v-col>
@@ -49,59 +83,59 @@
 </template>
 
 <script>
-import mapboxgl from "mapbox-gl";
-import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+import mapboxgl from 'mapbox-gl'
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
 
 export default {
 	data: () => ({
 		valid: false,
 		formData: {
-			name: "",
+			name: '',
 			startDate: new Date().toISOString().substr(0, 10),
 			endDate: new Date().toISOString().substr(0, 10),
-			country: "",
+			country: '',
 			latitude: 0,
 			longitude: 0
 		},
 		startMenu: false,
 		endMenu: false,
-		nameRules: [v => !!v || "Name is required"],
-		countryRules: [v => !!v || "Contry is required"]
+		nameRules: [v => !!v || 'Name is required'],
+		countryRules: [v => !!v || 'Contry is required']
 	}),
 	methods: {
 		async submit() {
 			if (!this.valid) {
-				this.$refs.form.validate();
+				this.$refs.form.validate()
 			} else {
-				const trip = await this.$tripRepository.create(this.formData);
-				this.$router.push({ path: "/trips" });
+				const trip = await this.$tripRepository.create(this.formData)
+				this.$router.push({ path: '/trips' })
 			}
 		}
 	},
 	mounted() {
-		mapboxgl.accessToken = process.env.MAPBOX_TOKEN;
+		mapboxgl.accessToken = process.env.MAPBOX_TOKEN
 		const map = new mapboxgl.Map({
-			container: "map",
-			style: "mapbox://styles/mapbox/streets-v11",
+			container: 'map',
+			style: 'mapbox://styles/mapbox/streets-v11',
 			center: [-79.4512, 43.6568],
 			zoom: 13
-		});
+		})
 
 		const geocoder = new MapboxGeocoder({
 			accessToken: mapboxgl.accessToken,
 			mapboxgl: mapboxgl,
-			placeholder: "Location"
-		});
-		document.getElementById("geocoder").appendChild(geocoder.onAdd(map));
-		geocoder.on("result", data => {
-			this.formData.longitude = data.result.center[0];
-			this.formData.latitude = data.result.center[1];
+			placeholder: 'Location'
+		})
+		document.getElementById('geocoder').appendChild(geocoder.onAdd(map))
+		geocoder.on('result', data => {
+			this.formData.longitude = data.result.center[0]
+			this.formData.latitude = data.result.center[1]
 			this.formData.country = data.result.context.find(context =>
-				context.id.includes("country")
-			).text;
-		});
+				context.id.includes('country')
+			).text
+		})
 	}
-};
+}
 </script>
 
 <style lang="scss" scoped>

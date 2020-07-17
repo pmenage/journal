@@ -2,20 +2,7 @@
 	<v-layout column>
 		<h1>My trips</h1>
 		<v-row>
-			<v-list>
-				<v-list-item-group>
-					<v-list-item :key="trip.id" v-for="trip in trips">
-						<v-list-item-content>
-							<nuxt-link :to="`/trips/${trip.id}`">
-								<v-list-item-title v-text="trip.name"></v-list-item-title>
-							</nuxt-link>
-						</v-list-item-content>
-					</v-list-item>
-				</v-list-item-group>
-			</v-list>
-		</v-row>
-		<v-row>
-			<v-col cols="12">
+			<v-col cols="12" class="map-container">
 				<div id="map"></div>
 			</v-col>
 		</v-row>
@@ -42,7 +29,8 @@ export default {
 			container: 'map',
 			style: 'mapbox://styles/mapbox/streets-v11',
 			center: [-79.4512, 43.6568],
-			zoom: 2
+			zoom: 2,
+			height: '500'
 		})
 		new mapboxgl.Marker({
 			draggable: true
@@ -51,6 +39,7 @@ export default {
 			.addTo(map)
 
 		map.on('load', () => {
+			map.resize()
 			this.trips.forEach(trip => {
 				new mapboxgl.Marker()
 					.setLngLat([trip.longitude, trip.latitude])
@@ -65,3 +54,17 @@ export default {
 	}
 }
 </script>
+
+<style scoped>
+.map-container {
+	height: 500px;
+}
+
+#map {
+	height: 100%;
+}
+
+.mapboxgl-canvas {
+	height: 100%;
+}
+</style>
