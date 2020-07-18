@@ -18,10 +18,8 @@ export default {
 			trips: []
 		}
 	},
-	async asyncData({ app }) {
-		return {
-			trips: await app.$tripRepository.findAll()
-		}
+	async fetch() {
+		this.trips = await this.$repositories.trip.findAll()
 	},
 	mounted() {
 		mapboxgl.accessToken = process.env.MAPBOX_TOKEN
@@ -45,7 +43,7 @@ export default {
 					.setLngLat([trip.longitude, trip.latitude])
 					.setPopup(
 						new mapboxgl.Popup().setHTML(
-							`<h3>${trip.name}</h3><p>${trip.startDate}</p>`
+							`<h3>${trip.title}</h3><p>${trip.startDate}</p>`
 						)
 					)
 					.addTo(map)

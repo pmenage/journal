@@ -6,9 +6,15 @@
 				<v-col>
 					<v-form ref="form" v-model="valid">
 						<v-text-field
-							v-model="formData.name"
-							:rules="nameRules"
-							label="Name"
+							v-model="formData.title"
+							:rules="titleRules"
+							label="Title"
+							required
+						></v-text-field>
+						<v-text-field
+							v-model="formData.subtitle"
+							:rules="subtitleRules"
+							label="Subtitle"
 							required
 						></v-text-field>
 						<v-menu
@@ -75,7 +81,9 @@
 					</v-form>
 				</v-col>
 				<v-col>
-					<div id="map"></div>
+					<div class="map-container">
+						<div id="map"></div>
+					</div>
 				</v-col>
 			</v-row>
 		</v-container>
@@ -90,25 +98,28 @@ export default {
 	data: () => ({
 		valid: false,
 		formData: {
-			name: '',
+			title: '',
+			subtitle: '',
 			startDate: new Date().toISOString().substr(0, 10),
 			endDate: new Date().toISOString().substr(0, 10),
+			coverImage: '',
 			country: '',
 			latitude: 0,
 			longitude: 0
 		},
 		startMenu: false,
 		endMenu: false,
-		nameRules: [v => !!v || 'Name is required'],
-		countryRules: [v => !!v || 'Contry is required']
+		titleRules: [v => !!v || 'Title is required'],
+		subtitleRules: [v => !!v || 'Subtitle is required'],
+		countryRules: [v => !!v || 'Country is required']
 	}),
 	methods: {
 		async submit() {
 			if (!this.valid) {
 				this.$refs.form.validate()
 			} else {
-				const trip = await this.$tripRepository.create(this.formData)
-				this.$router.push({ path: '/trips' })
+				const trip = await this.$repositories.trip.create(this.formData)
+				this.$router.push({ path: '/timeline' })
 			}
 		}
 	},
@@ -139,7 +150,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.map-container {
+	height: 500px;
+	width: 400px;
+	margin-left: 50px;
+}
+
 #map {
+	height: 100%;
+}
+
+.mapboxgl-canvas {
 	height: 100%;
 }
 </style>

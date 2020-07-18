@@ -1,6 +1,6 @@
 <template>
 	<v-layout column>
-		<h1>{{ trip.name }}</h1>
+		<h1>{{ trip.title }}</h1>
 		<v-row>
 			<v-col>
 				<div>
@@ -19,13 +19,11 @@ import mapboxgl from 'mapbox-gl'
 export default {
 	data() {
 		return {
-			trips: []
+			trip: undefined
 		}
 	},
-	async asyncData({ app }) {
-		return {
-			trip: await app.$tripRepository.findAllById(1)
-		}
+	async fetch() {
+		this.trip = await this.$repositories.trip.findById(1)
 	}
 }
 </script>
