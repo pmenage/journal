@@ -5,12 +5,9 @@ import { AppService } from './app.service';
 import { TripModule } from './module/trip/trip.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot(),
-    TripModule,
-  ],
+  imports: [TypeOrmModule.forRoot(), TripModule],
   controllers: [AppController],
   providers: [AppService],
   exports: [TypeOrmModule],
 })
-export class AppModule { }
+export class AppModule {}

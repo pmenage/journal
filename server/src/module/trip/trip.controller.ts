@@ -8,9 +8,15 @@ import {
   UploadedFile,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
 import { TripService } from './trip.service';
 import { TripEntity } from './trip.entity';
+
+import {
+  editRequestFileName,
+  editFileName,
+} from '../../utils/file-upload.utils';
 
 @Controller('/trips')
 export class TripController {
@@ -31,9 +37,17 @@ export class TripController {
     return this.tripService.create(tripEntity);
   }
 
-  @Post('coverImage/upload')
-  @UseInterceptors(FileInterceptor('file'))
-  uploadCoverImage(@UploadedFile() file) {
+  @Post(':id/coverImage/upload')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './images',
+        filename: editRequestFileName,
+      }),
+    }),
+  )
+  uploadCoverImage(@UploadedFile() file, @Param() id: number): Promise<void> {
     console.log(file);
+    return this.tripService.update(id, editFileName(file));
   }
 }

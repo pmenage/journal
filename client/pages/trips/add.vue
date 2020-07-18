@@ -17,6 +17,11 @@
 							label="Subtitle"
 							required
 						></v-text-field>
+						<v-file-input
+							accept="image/*"
+							label="Cover image"
+							@change="coverImageSelected"
+						></v-file-input>
 						<v-menu
 							v-model="startMenu"
 							:close-on-content-click="false"
@@ -111,7 +116,8 @@ export default {
 		endMenu: false,
 		titleRules: [v => !!v || 'Title is required'],
 		subtitleRules: [v => !!v || 'Subtitle is required'],
-		countryRules: [v => !!v || 'Country is required']
+		countryRules: [v => !!v || 'Country is required'],
+		coverImage: ''
 	}),
 	methods: {
 		async submit() {
@@ -119,8 +125,16 @@ export default {
 				this.$refs.form.validate()
 			} else {
 				const trip = await this.$repositories.trip.create(this.formData)
+				const imageFormData = new FormData()
+				imageFormData.append('file', this.coverImage)
+				await this.$repositories.trip.uploadCoverImage(trip.id, imageFormData)
 				this.$router.push({ path: '/timeline' })
 			}
+		},
+		coverImageSelected(e) {
+			console.log(e)
+			this.coverImage = e
+			console.log(this.coverImage)
 		}
 	},
 	mounted() {

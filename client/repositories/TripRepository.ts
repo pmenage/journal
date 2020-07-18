@@ -19,5 +19,13 @@ export default ($axios: any) => ({
 
 	delete(id: number) {
 		return $axios.$delete(`${resource}/${id}`)
+	},
+
+	uploadCoverImage(id: number, formData: Object) {
+		return $axios.$post(`${resource}/${id}/coverImage/upload`, formData, {
+			headers: {
+				'content-type': 'multipart/form-data'
+			}
+		})
 	}
 })

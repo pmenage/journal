@@ -22,4 +22,10 @@ export class TripService {
   create(tripEntity: TripEntity): Promise<TripEntity> {
     return this.tripRepository.save(tripEntity);
   }
+
+  async update(id: number, fileName: string): Promise<void> {
+    const trip = await this.tripRepository.findOne(id);
+    trip.coverImage = fileName;
+    await this.tripRepository.save(trip);
+  }
 }
